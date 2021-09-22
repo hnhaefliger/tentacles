@@ -16,8 +16,6 @@ public class PlayerMovement : MonoBehaviour
     }
 
     void Update() {
-
-
         moveDirection = new Vector3(Input.GetAxis("Horizontal"), 0, Input.GetAxis("Vertical"));
         moveDirection = cameraTransform.TransformDirection(moveDirection);
         moveDirection *= speed;

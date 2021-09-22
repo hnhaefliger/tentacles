@@ -40,9 +40,6 @@ public class TerrainChunk
         meshObject.GetComponent<MeshFilter>().sharedMesh = mesh;
         meshObject.GetComponent<MeshRenderer>().material = new Material(Shader.Find("Diffuse"));
 
-        //(vertices, triangles) = GenerateMesh();
-        //UpdateMesh();
-
         generated = false;
 
         ThreadStart threadStart = delegate {
@@ -65,7 +62,7 @@ public class TerrainChunk
             mesh.vertices = vertices;
             mesh.triangles = triangles;
 
-            //mesh.Optimize();
+            mesh.Optimize();
             mesh.RecalculateNormals();
             mesh.RecalculateBounds();
 

@@ -51,7 +51,7 @@ public class TerrainGenerator : MonoBehaviour
 
     Vector3[] CreateNeighborChunks(Vector3 position)
     {
-        if (Vector3.Distance(viewerPosition, position) < maxStoreDistance)
+        if (Vector3.Distance(viewerPosition, position) < maxViewDistance)
         {
             if (!chunks.ContainsKey(position))
             {
