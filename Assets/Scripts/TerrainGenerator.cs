@@ -6,10 +6,10 @@ using static TerrainChunk;
 
 public class TerrainGenerator : MonoBehaviour
 {
-    public int chunkSize = 20;
+    public int chunkSize = 10;
     public float threshold = 0.3f;
     public float multiplier = 0.1f;
-    public float maxViewDistance = 1f;
+    public float maxViewDistance = 2f;
     public float maxStoreDistance = 4f;
     public Transform viewer;
 
@@ -49,23 +49,48 @@ public class TerrainGenerator : MonoBehaviour
         }
     }
 
+    Vector3[] CreateNeighborChunks(Vector3 position)
+    {
+        if (Vector3.Distance(viewerPosition, position) < maxStoreDistance)
+        {
+            if (!chunks.ContainsKey(position))
+            {
+                chunks.Add(position, new TerrainChunk((int)position.x, (int)position.y, (int)position.z, chunkSize, threshold, multiplier, maxViewDistance, maxStoreDistance));
+                ungenerated.Add(position);
+            }
+
+            return new Vector3[] {
+                position + new Vector3(1, 0, 0),
+                position + new Vector3(-1, 0, 0),
+                position + new Vector3(0, 1, 0),
+                position + new Vector3(0, -1, 0),
+                position + new Vector3(0, 0, 1),
+                position + new Vector3(0, 0, -1)
+            };
+        }
+        else
+        {
+            return new Vector3[] {position};
+        }
+    }
+
     void CreateNewChunks()
     {
-        for (int i = (int)Mathf.FloorToInt(viewerPosition.x - maxViewDistance); i < (int)Mathf.FloorToInt(viewerPosition.x + maxViewDistance + 1); i++)
-        {
-            for (int j = (int)Mathf.FloorToInt(viewerPosition.y - maxViewDistance); j < (int)Mathf.FloorToInt(viewerPosition.y + maxViewDistance + 1); j++)
-            {
-                for (int k = (int)Mathf.FloorToInt(viewerPosition.z - maxViewDistance); k < (int)Mathf.FloorToInt(viewerPosition.z + maxViewDistance + 1); k++)
-                {
-                    Vector3 position = new Vector3(i, j, k);
+        List<Vector3> toCreate = new List<Vector3>{viewerPosition};
+        List<Vector3> created = new List<Vector3>();
 
-                    if (!chunks.ContainsKey(position))
-                    {
-                        chunks.Add(position, new TerrainChunk(i, j, k, chunkSize, threshold, multiplier, maxViewDistance, maxStoreDistance));
-                        ungenerated.Add(position);
-                    }
+        while (toCreate.Count > 0)
+        {
+            foreach (Vector3 position in CreateNeighborChunks(toCreate[0]))
+            {
+                if (!toCreate.Contains(position) && !created.Contains(position))
+                {
+                    toCreate.Add(position);
                 }
             }
+
+            created.Add(toCreate[0]);
+            toCreate.RemoveAt(0);
         }
     }
 
