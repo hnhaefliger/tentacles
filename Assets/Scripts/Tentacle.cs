@@ -2,57 +2,50 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class Tentacle : MonoBehaviour
+public class Tentacle
 {
-    public float maxTentacleLength = 10f;
-    public Transform cameraTransform;
-    public Transform playerTransform;
+    GameObject meshObject;
+    Transform transform;
+    SpringJoint tentacle;
+    float maxLength;
+    bool teathered = false;
 
-    Transform tentacle;
-
-    private bool inUse = false;
-    private bool teathered = false;
-    private Vector3 velocity;
-
-    void Start()
+    public Tentacle(float tentacleLength, Rigidbody playerRb)
     {
-        tentacle = GetComponent<Transform>();
+        meshObject = GameObject.CreatePrimitive(PrimitiveType.Sphere);
+
+        meshObject.AddComponent<Rigidbody>().constraints = RigidbodyConstraints.FreezePositionX | RigidbodyConstraints.FreezePositionY | RigidbodyConstraints.FreezePositionZ;
+        meshObject.GetComponent<MeshRenderer>().material = new Material(Shader.Find("Diffuse"));
+
+        transform = meshObject.GetComponent<Transform>();
+        transform.localScale = new Vector3(0.2f, 0.2f, 0.2f);
+        maxLength = tentacleLength;
+
+        tentacle = meshObject.AddComponent<SpringJoint>();
+        tentacle.connectedBody = playerRb;
     }
 
-    void Update()
+    public void Update(Vector3 playerPosition)
     {
-        if (!inUse)
+        if (!teathered)
         {
-            tentacle.position = playerTransform.position;
+            transform.position = playerPosition;
         }
+    }
 
-        if (Input.GetMouseButtonDown(0))
+    public bool Shoot(Vector3 direction, Vector3 playerPosition)
+    {
+        RaycastHit hit;
+        if (Physics.Raycast(new Ray(playerPosition, direction), out hit, maxLength))
         {
-            inUse = true;
-            velocity = cameraTransform.forward * 2f;
+            transform.position = hit.point;
+            teathered = true;
         }
         else
         {
-            if (teathered)
-            {
-                // move player
-            }
-            else
-            {
-                tentacle.position += velocity * Time.deltaTime;
-
-                if (Vector3.Distance(playerTransform.position, tentacle.position) > maxTentacleLength)
-                {
-                    velocity = new Vector3(0, 0, 0);
-                    inUse = false;
-                }
-            }
+            teathered = false;
         }
-    }
 
-    void OnCollisionEnter(Collision collision)
-    {
-        teathered = true;
-        velocity = new Vector3(0, 0, 0);
+        return teathered;
     }
 }

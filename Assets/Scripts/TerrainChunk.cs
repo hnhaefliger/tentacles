@@ -32,7 +32,7 @@ public class TerrainChunk
         mesh = new Mesh();
         mesh.Clear();
 
-        meshObject = new GameObject("Empty");
+        meshObject = new GameObject("Chunk" + position.ToString());
         meshObject.AddComponent<MeshFilter>();
         meshObject.AddComponent<MeshRenderer>();
         meshObject.AddComponent<MeshCollider>();
