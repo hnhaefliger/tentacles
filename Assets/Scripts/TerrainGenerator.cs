@@ -12,6 +12,7 @@ public class TerrainGenerator : MonoBehaviour
     public float maxViewDistance = 2f;
     public float maxStoreDistance = 4f;
     public Transform viewer;
+    public Material material;
 
     Vector3 viewerPosition;
     TerrainChunk chunk;
@@ -55,7 +56,7 @@ public class TerrainGenerator : MonoBehaviour
         {
             if (!chunks.ContainsKey(position))
             {
-                chunks.Add(position, new TerrainChunk((int)position.x, (int)position.y, (int)position.z, chunkSize, threshold, multiplier, maxViewDistance, maxStoreDistance));
+                chunks.Add(position, new TerrainChunk((int)position.x, (int)position.y, (int)position.z, chunkSize, threshold, multiplier, maxViewDistance, maxStoreDistance, material));
                 ungenerated.Add(position);
             }
 

@@ -9,6 +9,7 @@ public class PlayerMovement : MonoBehaviour
     public float tentacleLength = 5f;
 
     public Transform cameraTransform;
+    public Material material;
 
     Rigidbody rb;
     Tentacle[] tentacles;
@@ -20,7 +21,7 @@ public class PlayerMovement : MonoBehaviour
 
         for (int i = 0; i < nTentacles; i++)
         {
-            tentacles[i] = new Tentacle(tentacleLength, rb);
+            tentacles[i] = new Tentacle(tentacleLength, rb, material);
         }
     }
 

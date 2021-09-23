@@ -21,7 +21,7 @@ public class TerrainChunk
     int[] triangles;
     bool generated;
 
-    public TerrainChunk(int x, int y, int z, int tmpChunkSize, float tmpThreshold, float tmpMultiplier, float tmpMaxViewDistance, float tmpMaxStoreDistance)
+    public TerrainChunk(int x, int y, int z, int tmpChunkSize, float tmpThreshold, float tmpMultiplier, float tmpMaxViewDistance, float tmpMaxStoreDistance, Material material)
     {
         position = new Vector3(x, y, z);
         chunkSize = tmpChunkSize;
@@ -38,7 +38,7 @@ public class TerrainChunk
         meshObject.AddComponent<MeshCollider>();
 
         meshObject.GetComponent<MeshFilter>().sharedMesh = mesh;
-        meshObject.GetComponent<MeshRenderer>().material = new Material(Shader.Find("Diffuse"));
+        meshObject.GetComponent<MeshRenderer>().material = material;
 
         generated = false;
 
