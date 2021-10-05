@@ -1,5 +1,7 @@
 public static class MarchingCubesConstants
 {
+    // These are the lookup tables for the marching cubes algorithm
+    
     public static int[,] table => new int[256, 12]
     {
         {-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,},

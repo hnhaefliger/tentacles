@@ -8,6 +8,7 @@ using static MarchingCubesConstants;
 public static class MarchingCubes
 {
     public static (Vector3[], int[]) March(bool[] cubes, int x, int y, int z, int chunkSize) {
+        // Marching cubes implementation based on lookup table for speed.
         Vector3[] vertices = new Vector3[cubes.Length*12];
         int nVertices = 0;
         int[] triangles = new int[cubes.Length*12];
